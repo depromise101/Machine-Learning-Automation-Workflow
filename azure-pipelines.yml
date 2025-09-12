@@ -10,15 +10,20 @@ stages:
       vmImage: 'ubuntu-latest'
     steps:
     - task: UsePythonVersion@0
-      displayName: 'Install Python'
+      inputs:
+        versionSpec: '3.10'
+      displayName: 'Install Python 3.10'
+
     - script: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
       displayName: 'Install Dependencies'
+
     - script: |
         python train.py
         python evaluate.py
       displayName: 'Train and Evaluate Model'
+
     - task: PublishBuildArtifacts@1
       inputs:
         PathtoPublish: '$(Build.SourcesDirectory)/model.pkl'
@@ -34,10 +39,11 @@ stages:
     steps:
     - download: current
       artifact: trained_model
+
     - script: |
         echo "Deploying the trained model..."
-        # This is where you will add your specific deployment commands.
-        # For example, to deploy to Azure App Service or Azure Machine Learning
+        # Add your deployment commands here.
+        # Example:
         # az ml model create --name waze-churn-model --path $(Pipeline.Workspace)/trained_model/model.pkl
         # az ml endpoint create --name waze-churn-api --file endpoint.yml
       displayName: 'Deploy Model'
