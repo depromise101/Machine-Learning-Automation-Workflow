@@ -2,4 +2,3 @@ scikit-learn
 pandas
 numpy
 joblib
-json
